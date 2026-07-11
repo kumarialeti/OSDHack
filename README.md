@@ -28,25 +28,24 @@ All inference runs in the browser; no network calls are made after the initial m
 ## Architecture Diagram
 ```mermaid
 graph TD;
-    A[User Interface] -->|Upload Files| B[File Handlers (utils.js)]
-    B --> C[Embedding Engine (ONNX Runtime Web)]
-    C --> D[Vector Store (Dexie IndexedDB)]
-    D --> E[Similarity Search (cosine similarity)]
-    E --> F[Prompt Construction]
-    F --> G[WebLLM (Qwen2‑0.5B‑Instruct)]
-    G --> H[Answer Generation]
-    H --> A
+    A["User Interface"] -->|"Upload Files"| B["File Handlers (utils.js)"]
+    B --> C["Embedding Engine (Transformers.js)"]
+    C --> D["Vector Store (Dexie IndexedDB)"]
+    D --> E["Similarity Search (cosine similarity)"]
+    E --> F["Prompt Construction"]
+    F --> G["WebLLM (Qwen2-0.5B-Instruct)"]
+    G --> H["Answer Generation"]
     subgraph ATS
-        I[Resume Upload] --> J[Keyword Extraction]
-        K[Job Description Upload] --> J
-        J --> L[Deterministic Scoring]
-        L --> M[Optional LLM Advice]
+        I["Resume Upload"] --> J["Keyword Extraction"]
+        K["Job Description Upload"] --> J
+        J --> L["Deterministic Scoring"]
+        L --> M["Optional LLM Advice"]
         M --> A
     end
     subgraph Privacy
-        N[Dashboard UI] --> O[IndexedDB Stats]
-        N --> P[Cache Storage Stats]
-        N --> Q[Clear All]
+        N["Dashboard UI"] --> O["IndexedDB Stats"]
+        N --> P["Cache Storage Stats"]
+        N --> Q["Clear All"]
     end
 ```
 
