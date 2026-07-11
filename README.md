@@ -12,6 +12,13 @@ We built a single‑page web app that runs a **local LLM** (Qwen2‑0.5B‑Instr
 
 All inference runs in the browser; no network calls are made after the initial model download, satisfying the on‑device requirement.
 
+## Features
+- **100% Offline AI**: Runs entirely in the browser using WebGPU/WASM, keeping all data on-device.
+- **Multi-Document RAG**: Upload and search across multiple PDFs and Text documents simultaneously.
+- **Smart ATS Evaluator**: Get precise keyword-matching scores and actionable AI resume-improvement advice.
+- **Privacy Dashboard**: Complete transparency over your local data with a 1-click wipe option.
+- **Zero Cloud APIs**: Uses local WebLLM for generation and Transformers.js for semantic embeddings.
+
 ## On‑Device AI Compliance
 - **No external APIs** – all model files are cached locally via the browser’s Cache Storage.
 - **Local storage** – documents, embeddings, and model weights stay in IndexedDB / Cache Storage.
@@ -42,6 +49,15 @@ graph TD;
         N --> Q[Clear All]
     end
 ```
+
+## AI Pipeline
+The core functionality relies on a streamlined local AI pipeline:
+1. **Document Upload**: PDF.js extracts raw text from uploaded files directly in the browser.
+2. **Chunking**: Text is split into semantic chunks of 600 characters with 100 characters of overlap.
+3. **Embedding**: `Transformers.js` uses the `all-MiniLM-L6-v2` model to convert chunks into dense vector embeddings.
+4. **Storage**: Vectors are indexed locally using `Dexie.js` (IndexedDB).
+5. **Retrieval**: When a query is made, it is embedded and matched against the local index using Cosine Similarity.
+6. **Generation**: The top retrieved chunks are injected into a prompt and sent to `WebLLM` (Qwen2-0.5B-Instruct) to generate a conversational answer with citations.
 
 ## Tech Stack
 - **HTML / CSS** – vanilla, glassmorphism design, responsive layout.
@@ -84,12 +100,15 @@ graph TD;
 4. **Privacy Dashboard**  
    ![Privacy](assets/screenshot4.png)
 
-## Future Scope
+## Future Improvements
 - Add **vector quantization** to reduce memory footprint.
 - Support **incremental indexing** for larger corpora.
 - Integrate **speech‑to‑text** for voice queries.
 - Provide **export / import** of the vector store.
 - Explore **fine‑tuning** the LLM on domain‑specific data (still offline).
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 *Built for OSDHack 2026 – a fully offline, privacy‑preserving AI demo.*
