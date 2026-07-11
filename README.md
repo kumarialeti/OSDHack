@@ -70,7 +70,19 @@ graph TD;
 2. **RAG** – drag‑and‑drop one or more PDFs/Markdown files, click **Build Index**, then ask a question.
 3. **ATS** – upload a resume file and a job description, click **Evaluate**, view the score and missing keywords; optional LLM advice appears if the model is loaded.
 4. **Privacy** – open the **Privacy** tab to see storage usage and press **Clear All** to wipe data.
-5. **Rulebook** – accessible under **Resources → Rulebook** (optional).
+
+## Screenshots
+
+*(Please place your screenshots in an `assets/` folder and name them as follows)*
+
+1. **Home / Model Loading**  
+   ![Home](assets/screenshot1.png)
+2. **RAG Pipeline & Retrieval**  
+   ![RAG](assets/screenshot2.png)
+3. **ATS Resume Evaluator**  
+   ![ATS](assets/screenshot3.png)
+4. **Privacy Dashboard**  
+   ![Privacy](assets/screenshot4.png)
 
 ## Future Scope
 - Add **vector quantization** to reduce memory footprint.
