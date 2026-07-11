@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OSDHack 2026 – On‑Device AI</title>
+  <meta name="description" content="Fully offline AI-powered RAG and ATS evaluation. WebLLM + ONNX embeddings, no cloud APIs." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+
+  <!-- ========== HEADER ========== -->
+  <header class="header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">🧠</span>
+        <span class="logo-text">OSDHack<span class="logo-accent">2026</span></span>
+      </div>
+      <nav class="nav" id="nav">
+        <button class="nav-btn active" data-tab="home">Home</button>
+        <button class="nav-btn" data-tab="rag">RAG</button>
+        <button class="nav-btn" data-tab="ats">ATS</button>
+        <button class="nav-btn" data-tab="privacy">Privacy</button>
+      </nav>
+      <div class="header-badges">
+        <span class="badge badge-offline" id="offline-badge">⬤ Offline</span>
+        <span class="badge badge-model" id="model-badge">Model: Not Loaded</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========== MAIN ========== -->
+  <main class="main">
+
+    <!-- ===== HOME TAB ===== -->
+    <section class="tab-pane active" id="tab-home">
+      <div class="hero">
+        <h1 class="hero-title">On‑Device AI<br /><span class="gradient-text">Runs Entirely in Your Browser</span></h1>
+        <p class="hero-sub">WebLLM · ONNX Embeddings · IndexedDB · Zero Cloud APIs</p>
+      </div>
+
+      <!-- Model Loader Card -->
+      <div class="card" id="model-loader-card">
+        <div class="card-header">
+          <span class="card-icon">🚀</span>
+          <h2>Phase 1 — Load Local AI Model</h2>
+        </div>
+        <p class="card-desc">Downloads <strong>Qwen2-0.5B-Instruct</strong> via WebLLM and caches it locally. After the first download, it works fully offline.</p>
+        <div class="model-status-row" id="model-status-row">
+          <div class="status-dot" id="status-dot"></div>
+          <span id="model-status-text">Model not loaded</span>
+        </div>
+        <div class="progress-wrap hidden" id="model-progress-wrap">
+          <div class="progress-bar">
+            <div class="progress-fill" id="model-progress-fill"></div>
+          </div>
+          <span class="progress-label" id="model-progress-label">0%</span>
+        </div>
+        <button class="btn btn-primary" id="load-model-btn">⚡ Load Model</button>
+      </div>
+
+      <!-- Pipeline Visualization -->
+      <div class="card pipeline-card">
+        <div class="card-header">
+          <span class="card-icon">🔄</span>
+          <h2>RAG Pipeline</h2>
+        </div>
+        <div class="pipeline">
+          <div class="pipeline-step" id="pipe-upload">
+            <div class="pipe-icon">📄</div>
+            <div class="pipe-label">Upload Docs</div>
+          </div>
+          <div class="pipeline-arrow">→</div>
+          <div class="pipeline-step" id="pipe-chunk">
+            <div class="pipe-icon">✂️</div>
+            <div class="pipe-label">Chunk Text</div>
+          </div>
+          <div class="pipeline-arrow">→</div>
+          <div class="pipeline-step" id="pipe-embed">
+            <div class="pipe-icon">🔢</div>
+            <div class="pipe-label">ONNX Embed</div>
+          </div>
+          <div class="pipeline-arrow">→</div>
+          <div class="pipeline-step" id="pipe-store">
+            <div class="pipe-icon">💾</div>
+            <div class="pipe-label">IndexedDB</div>
+          </div>
+          <div class="pipeline-arrow">→</div>
+          <div class="pipeline-step" id="pipe-retrieve">
+            <div class="pipe-icon">🔍</div>
+            <div class="pipe-label">Retrieve</div>
+          </div>
+          <div class="pipeline-arrow">→</div>
+          <div class="pipeline-step" id="pipe-llm">
+            <div class="pipe-icon">🤖</div>
+            <div class="pipe-label">WebLLM</div>
+          </div>
+          <div class="pipeline-arrow">→</div>
+          <div class="pipeline-step" id="pipe-answer">
+            <div class="pipe-icon">💬</div>
+            <div class="pipe-label">Answer + Citations</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature Grid -->
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📚</div>
+          <h3>Multi-Doc RAG</h3>
+          <p>Upload PDFs, TXT, and Markdown. Ask questions across all documents at once.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3>ATS Evaluation</h3>
+          <p>Deterministic keyword scoring + LLM-generated improvement suggestions.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>100% Private</h3>
+          <p>All inference runs locally. No data leaves your browser. Ever.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>WebGPU Accelerated</h3>
+          <p>Uses WebGPU when available for fast inference, falls back to WASM.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== RAG TAB ===== -->
+    <section class="tab-pane" id="tab-rag">
+      <div class="page-title">
+        <h2>📚 Multi-Document RAG</h2>
+        <p>Upload documents, build a local vector index, then ask questions with citations.</p>
+      </div>
+
+      <!-- Phase 2: Upload -->
+      <div class="card" id="rag-upload-card">
+        <div class="card-header">
+          <span class="card-icon">📂</span>
+          <h3>Phase 2 — Upload Documents</h3>
+        </div>
+        <div class="drop-zone" id="rag-drop-zone">
+          <div class="drop-icon">⬆️</div>
+          <p class="drop-text">Drag & Drop files here</p>
+          <p class="drop-sub">Supports PDF, TXT, Markdown</p>
+          <button class="btn btn-outline" id="rag-browse-btn">Browse Files</button>
+          <input type="file" id="rag-file-input" multiple accept=".pdf,.txt,.md" class="hidden-input" />
+        </div>
+        <ul class="doc-list" id="rag-doc-list"></ul>
+        <div class="card-actions" id="rag-index-actions" style="display:none">
+          <button class="btn btn-secondary" id="rag-index-btn">🔢 Build Index</button>
+          <span class="action-hint">Chunks text → generates ONNX embeddings → stores in IndexedDB</span>
+        </div>
+        <div class="index-progress hidden" id="rag-index-progress">
+          <div class="progress-bar">
+            <div class="progress-fill" id="rag-index-fill"></div>
+          </div>
+          <span id="rag-index-label">Indexing...</span>
+        </div>
+        <div class="stats-row hidden" id="rag-stats">
+          <span class="stat-chip" id="stat-docs">0 docs</span>
+          <span class="stat-chip" id="stat-chunks">0 chunks</span>
+          <span class="stat-chip" id="stat-vectors">0 vectors</span>
+        </div>
+      </div>
+
+      <!-- Phase 5+6: Ask -->
+      <div class="card" id="rag-query-card">
+        <div class="card-header">
+          <span class="card-icon">💬</span>
+          <h3>Phase 5+6 — Ask a Question</h3>
+        </div>
+        <div class="query-row">
+          <textarea id="rag-question" class="textarea" rows="3" placeholder="Ask anything about your uploaded documents..."></textarea>
+          <button class="btn btn-primary" id="rag-ask-btn">Ask AI →</button>
+        </div>
+        <div class="answer-box hidden" id="rag-answer-box">
+          <div class="answer-thinking hidden" id="rag-thinking">
+            <div class="spinner"></div>
+            <span>WebLLM is thinking...</span>
+          </div>
+          <div id="rag-answer-text" class="answer-text"></div>
+          <div class="citations hidden" id="rag-citations"></div>
+          <div class="answer-actions hidden" id="rag-answer-actions">
+            <button class="btn btn-sm" id="rag-copy-btn">📋 Copy</button>
+            <button class="btn btn-sm" id="rag-download-btn">⬇️ Download</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== ATS TAB ===== -->
+    <section class="tab-pane" id="tab-ats">
+      <div class="page-title">
+        <h2>🎯 ATS Resume Evaluator</h2>
+        <p>Upload your resume and a job description. Get a deterministic score + LLM suggestions.</p>
+      </div>
+
+      <div class="ats-upload-grid">
+        <!-- Resume Upload -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">📄</span>
+            <h3>Resume</h3>
+          </div>
+          <div class="drop-zone drop-zone-sm" id="resume-drop-zone">
+            <div class="drop-icon">📋</div>
+            <p class="drop-text" id="resume-label">Drop Resume Here</p>
+            <p class="drop-sub">PDF, TXT, or MD</p>
+            <input type="file" id="resume-input" accept=".pdf,.txt,.md" class="hidden-input" />
+          </div>
+        </div>
+
+        <!-- JD Upload -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-icon">💼</span>
+            <h3>Job Description</h3>
+          </div>
+          <div class="drop-zone drop-zone-sm" id="jd-drop-zone">
+            <div class="drop-icon">📝</div>
+            <p class="drop-text" id="jd-label">Drop Job Description Here</p>
+            <p class="drop-sub">PDF, TXT, or MD</p>
+            <input type="file" id="jd-input" accept=".pdf,.txt,.md" class="hidden-input" />
+          </div>
+        </div>
+      </div>
+
+      <div class="card-actions" style="margin-top:1rem">
+        <button class="btn btn-primary" id="ats-eval-btn" disabled>🔍 Evaluate Match</button>
+      </div>
+
+      <!-- ATS Results -->
+      <div class="card hidden" id="ats-result-card">
+        <div class="card-header">
+          <span class="card-icon">📊</span>
+          <h3>ATS Score</h3>
+        </div>
+        <!-- Circular Score -->
+        <div class="ats-score-section">
+          <div class="circular-score-wrap">
+            <svg class="score-ring" viewBox="0 0 120 120">
+              <circle class="ring-bg" cx="60" cy="60" r="50"/>
+              <circle class="ring-fill" id="score-ring-fill" cx="60" cy="60" r="50" stroke-dasharray="314" stroke-dashoffset="314"/>
+            </svg>
+            <div class="score-label">
+              <span class="score-number" id="ats-score-number">0</span>
+              <span class="score-pct">%</span>
+            </div>
+          </div>
+          <div class="ats-breakdown">
+            <div class="breakdown-row">
+              <span>Keywords Matched</span>
+              <div class="mini-bar"><div class="mini-fill" id="bar-keywords"></div></div>
+              <span id="bar-keywords-pct">0%</span>
+            </div>
+            <div class="breakdown-row">
+              <span>Skills Coverage</span>
+              <div class="mini-bar"><div class="mini-fill" id="bar-skills"></div></div>
+              <span id="bar-skills-pct">0%</span>
+            </div>
+            <div class="breakdown-row">
+              <span>Section Completeness</span>
+              <div class="mini-bar"><div class="mini-fill" id="bar-sections"></div></div>
+              <span id="bar-sections-pct">0%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Keyword Lists -->
+        <div class="keyword-grid">
+          <div>
+            <h4 class="kw-title kw-matched">✅ Matched Keywords</h4>
+            <div class="kw-tags" id="kw-matched"></div>
+          </div>
+          <div>
+            <h4 class="kw-title kw-missing">❌ Missing Keywords</h4>
+            <div class="kw-tags" id="kw-missing"></div>
+          </div>
+        </div>
+
+        <!-- LLM Advice -->
+        <div class="card advice-card" id="ats-advice-card">
+          <div class="card-header">
+            <span class="card-icon">🤖</span>
+            <h3>LLM Improvement Suggestions</h3>
+            <div class="spinner hidden" id="advice-spinner"></div>
+          </div>
+          <div id="ats-advice-text" class="advice-text">Load the AI model to get personalized suggestions.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== PRIVACY TAB ===== -->
+    <section class="tab-pane" id="tab-privacy">
+      <div class="page-title">
+        <h2>🔒 Privacy Dashboard</h2>
+        <p>Everything runs locally. See exactly what's stored and clear it anytime.</p>
+      </div>
+
+      <div class="privacy-grid">
+        <div class="stat-card" id="prv-docs-card">
+          <div class="stat-card-icon">📄</div>
+          <div class="stat-card-val" id="prv-docs">—</div>
+          <div class="stat-card-label">Documents Stored</div>
+        </div>
+        <div class="stat-card" id="prv-chunks-card">
+          <div class="stat-card-icon">✂️</div>
+          <div class="stat-card-val" id="prv-chunks">—</div>
+          <div class="stat-card-label">Chunks Indexed</div>
+        </div>
+        <div class="stat-card" id="prv-size-card">
+          <div class="stat-card-icon">💾</div>
+          <div class="stat-card-val" id="prv-size">—</div>
+          <div class="stat-card-label">Storage Used (KB)</div>
+        </div>
+        <div class="stat-card" id="prv-model-card">
+          <div class="stat-card-icon">🤖</div>
+          <div class="stat-card-val" id="prv-model">—</div>
+          <div class="stat-card-label">Model Status</div>
+        </div>
+        <div class="stat-card stat-card-green">
+          <div class="stat-card-icon">🌐</div>
+          <div class="stat-card-val">0</div>
+          <div class="stat-card-label">Network Calls During Inference</div>
+        </div>
+        <div class="stat-card stat-card-green">
+          <div class="stat-card-icon">☁️</div>
+          <div class="stat-card-val">None</div>
+          <div class="stat-card-label">Cloud APIs Used</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:1.5rem">
+        <div class="card-header">
+          <span class="card-icon">🗑️</span>
+          <h3>Data Management</h3>
+        </div>
+        <p style="margin-bottom:1rem;color:var(--text-muted)">Clear all locally stored documents, embeddings, and model cache. This cannot be undone.</p>
+        <button class="btn btn-danger" id="privacy-clear-btn">🗑️ Clear All Local Data</button>
+        <button class="btn btn-outline" id="privacy-refresh-btn" style="margin-left:0.5rem">🔄 Refresh Stats</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- SVG gradient defs for score ring -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%"   stop-color="hsl(213,90%,58%)"/>
+        <stop offset="100%" stop-color="hsl(270,80%,65%)"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <!-- Toast Container -->
+  <div id="toast-container"></div>
+
+  <!-- Libraries (CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    if (typeof pdfjsLib !== 'undefined') {
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+  </script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
