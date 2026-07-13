@@ -1,5 +1,10 @@
 # OSDHack 2026 – On‑Device AI Knowledge Base
 
+### Demo
+
+- Video demo: [Watch here](https://drive.google.com/file/d/1sBfZXJrlT83Rtihq3JFvIydy2k8ZJPuD/view?usp=drive_link)
+- Live site: [GitHub Pages](https://kumarialeti.github.io/OSDHack/)
+
 ## Problem Statement
 Participants need to demonstrate **on‑device AI** that runs **entirely in the browser** without any external APIs. The challenge is to provide useful AI‑powered functionality (retrieval‑augmented generation, resume evaluation) while keeping the solution lightweight, private, and offline.
 
