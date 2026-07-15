@@ -91,6 +91,15 @@ The core functionality relies on a streamlined local AI pipeline:
 3. **ATS** – upload a resume file and a job description, click **Evaluate**, view the score and missing keywords; optional LLM advice appears if the model is loaded.
 4. **Privacy** – open the **Privacy** tab to see storage usage and press **Clear All** to wipe data.
 
+### Sample Inputs & Expected Outputs
+**Feature 1: RAG Pipeline**
+- **Sample Input**: A PDF containing a company policy document. User asks: *"What is the policy on remote work?"*
+- **Expected Output**: The model generates a response summarizing the remote work policy, citing the specific uploaded document, without making any external API calls.
+
+**Feature 2: ATS Evaluator**
+- **Sample Input**: A software engineering resume (PDF) and a job description (Text) requiring React, Node.js, and Python.
+- **Expected Output**: A percentage match score based on cosine similarity, a list of missing keywords (e.g., Python), and LLM-generated constructive feedback on how to improve the resume.
+
 ## Screenshots
 
 1. **Home / Model Loading**  
