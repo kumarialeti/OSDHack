@@ -93,16 +93,16 @@ The core functionality relies on a streamlined local AI pipeline:
 
 ## Screenshots
 
-*(Please place your screenshots in an `assets/` folder and name them as follows)*
-
 1. **Home / Model Loading**  
-   ![Home](assets/screenshot1.png)
-2. **RAG Pipeline & Retrieval**  
-   ![RAG](assets/screenshot2.png)
-3. **ATS Resume Evaluator**  
-   ![ATS](assets/screenshot3.png)
-4. **Privacy Dashboard**  
-   ![Privacy](assets/screenshot4.png)
+   ![Home](screenshots/home.png)
+2. **RAG Pipeline – Upload Documents**  
+   ![RAG Upload](screenshots/rag_upload.png)
+3. **RAG Pipeline – AI Answer with Citations**  
+   ![RAG Answer](screenshots/rag_answer.png)
+4. **ATS Resume Evaluator**  
+   ![ATS](screenshots/ats.png)
+5. **Privacy Dashboard**  
+   ![Privacy](screenshots/privacy.png)
 
 ## Future Improvements
 - Add **vector quantization** to reduce memory footprint.
