@@ -116,3 +116,29 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 *Built for OSDHack 2026 – a fully offline, privacy‑preserving AI demo.*
+
+## Local AI Verification
+- ✔ Document parsing runs locally
+- ✔ Embeddings generated locally
+- ✔ Vector search runs locally
+- ✔ ATS runs locally
+- ✔ LLM inference runs locally after initial model download
+- ✔ No user documents are sent to external AI APIs
+
+## Attribution
+- **WebLLM** – runs the Qwen2‑0.5B‑Instruct model in the browser
+- **PDF.js** – client‑side PDF parsing
+- **ONNX Runtime Web** – embedding inference
+- **IndexedDB** – persistent vector store
+- **GitHub Pages** – hosting the demo site
+- **Qwen2** – pretrained LLM used
+- Open‑source libraries from the community
+
+## Architecture
+See the detailed [ARCHITECTURE.md](ARCHITECTURE.md) for a system diagram and pipeline description.
+
+## Technical Report
+Performance details are documented in [TECHNICAL_REPORT.md](TECHNICAL_REPORT.md).
+
+---
+*Built for OSDHack 2026 – a fully offline, privacy‑preserving AI demo.*
